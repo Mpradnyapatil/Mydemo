@@ -1,0 +1,69 @@
+https://secbot.com/docs/ports/common-ports
+
+
+
+
+import mysql.connector
+import pandas as pd
+
+def data_dump(host,user,password,database):
+    conn = mysql.connector.connect(host=host, user=user, password=password, database=database, port=3306)
+    cur = conn.cursor()
+    df = pd.read_excel('testconcat.xlsx')
+    for row in df.iterrows():
+        print(f"{row[1][0]}, {row[1][1]}, {row[1][2]}")
+        cur.execute(f"insert into emp (id,name,city) values ({row[1][0]},'{row[1][1]}','{row[1][2]}')")
+        conn.commit()
+def main():
+    data_dump('localhost','root','root','csvdumptest')
+
+
+if __name__=='__main__':
+    main()
+	
+	
+BULK INSERT Sales.Orders
+FROM '\\SystemX\DiskZ\Sales\data\orders.csv'
+WITH ( FORMAT = 'CSV');
+
+
+
+import mysql.connector
+import pandas as pd
+
+def data_dump(host,user,password,database):
+    conn = mysql.connector.connect(host=host, user=user, password=password, database=database, port=3306)
+    cur = conn.cursor()
+
+    cur.execute("select * from emp")
+
+    data = cur.fetchall()
+
+
+    df = pd.DataFrame(data,columns=['id_df','name_df','city_df'])
+    print(df)
+
+
+def main():
+    data_dump('localhost','root','root','csvdumptest')
+
+
+if __name__=='__main__':
+    main()
+
+
+
+import pyodbc
+
+conn = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
+                      'Server=LAPTOP-24JHMUGS\SQLEXPRESS;'
+                      'Trusted_Connection=yes;'
+                      'Database=test04'
+                      )
+cur = conn.cursor()
+
+cur.execute("""BULK INSERT dbo.whtest
+FROM 'C:\\Users\\kanti\\OneDrive\\Desktop\\AdvPython\\weight-height.csv'
+WITH ( FORMAT = 'CSV')""")
+
+conn.commit()
